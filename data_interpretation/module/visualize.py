@@ -12,7 +12,7 @@ class Visualize:
         """
         Vẽ biểu đồ đường thể hiện số lượng lỗi và request hợp lệ qua thời gian.
         """
-        self.log_df['request_type'] = self.log_df['level'].apply(lambda x: 'Lỗi' if x == "Error" else 'Hợp lệ')
+        self.log_df['request_type'] = self.log_df['status'].apply(lambda x: 'Lỗi' if x != 200 else 'Hợp lệ')
         hourly_counts = self.log_df.groupby(['hour', 'request_type']).size().unstack(fill_value=0)
         
         plt.figure(figsize=(10, 6))
@@ -54,9 +54,9 @@ class Visualize:
 
 
 if __name__ == "__main__":
-     path = r'/Users/phamthiphuongthuy/Desktop/Intern/server_log/data/parsed_logs.csv'
+     log_path = r'/Users/phamthiphuongthuy/Desktop/Intern/server_log/data/parsed_logs.csv'
 
-     visualizer = Visualize(path)
+     visualizer = Visualize(log_path)
      visualizer.plot_errors_over_time()
      visualizer.plot_request_distribution()
      visualizer.plot_bytes_sent_per_hour()
